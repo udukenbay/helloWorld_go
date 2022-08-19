@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"hello_world/controllers"
+	"hello_world/models"
 	"hello_world/src/server"
 	"html/template"
 	"net/http"
@@ -11,8 +12,6 @@ import (
 )
 
 func main() {
-	// db.RemoveUser(id)
-	// fmt.Println(db.GetUsers())
 
 	router := mux.NewRouter()
 	// GET user
@@ -25,8 +24,11 @@ func main() {
 	router.HandleFunc("/user/{id}", controllers.RemoveUser).Methods("DELETE")
 
 	router.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
+
 		t, _ := template.ParseFiles("views/home.html")
-		t.Execute(w, "Привет мир!")
+
+		users := models.GetUsers()
+		t.Execute(w, users)
 	})
 
 	fmt.Println("Веб сервер запущен")

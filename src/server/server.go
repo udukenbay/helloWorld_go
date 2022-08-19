@@ -17,11 +17,15 @@ func New(port int) *Server {
 	}
 }
 
+// Запуск сервера
 func (s *Server) Start(router *mux.Router) error {
+	// Установка префикса для статических файлов
+	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("views/"))))
 	http.Handle("/", router)
 	return http.ListenAndServe(fmt.Sprintf(":%d", s.Port), nil)
 }
 
+// Остановка сервера
 func (s *Server) Stop() error {
 	return nil
 }
